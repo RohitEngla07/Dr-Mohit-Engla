@@ -1,0 +1,54 @@
+---
+import SectionHeading from "./SectionHeading.astro";
+import { siteConfig } from "../data/site";
+import { aboutContent } from "../data/content";
+---
+
+<SectionHeading
+  id="about"
+  label="About"
+  title="Thoughtful care, clear communication"
+  description="Every patient deserves to understand their condition and feel confident in their treatment plan."
+>
+  <div class="grid gap-8 lg:grid-cols-5 lg:gap-12">
+    <div class="reveal space-y-5 text-base leading-relaxed text-[var(--color-ink-muted)] lg:col-span-3">
+      {aboutContent.paragraphs.slice(0, 2).map((paragraph) => <p>{paragraph}</p>)}
+    </div>
+
+    <aside class="reveal reveal-delay-2 space-y-4 lg:col-span-2">
+      <div class="card-static overflow-hidden">
+        <div class="bg-[var(--color-accent)] px-6 py-4">
+          <h3 class="text-sm font-semibold text-white">Quick facts</h3>
+        </div>
+        <dl class="space-y-4 px-6 py-5">
+          <div>
+            <dt class="text-xs font-medium text-[var(--color-ink-subtle)]">Registration</dt>
+            <dd class="mt-0.5 font-semibold text-[var(--color-ink)]">{siteConfig.credentials.registrationNo}</dd>
+          </div>
+          <div>
+            <dt class="text-xs font-medium text-[var(--color-ink-subtle)]">Specialty</dt>
+            <dd class="mt-0.5 font-semibold text-[var(--color-ink)]">{siteConfig.credentials.specialty}</dd>
+          </div>
+          <div>
+            <dt class="text-xs font-medium text-[var(--color-ink-subtle)]">Languages</dt>
+            <dd class="mt-0.5 font-semibold text-[var(--color-ink)]">{aboutContent.languages.join(" · ")}</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="card-static p-6">
+        <h3 class="text-sm font-semibold text-[var(--color-ink)]">Where I've trained & worked</h3>
+        <ul class="mt-4 space-y-3">
+          {
+            aboutContent.affiliations.map((item) => (
+              <li class="flex gap-3 text-sm leading-snug text-[var(--color-ink-muted)]">
+                <span class="mt-2 h-1 w-4 shrink-0 rounded-full bg-[var(--color-accent)]" aria-hidden="true"></span>
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </aside>
+  </div>
+</SectionHeading>

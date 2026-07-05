@@ -1,0 +1,64 @@
+---
+import { siteConfig } from "../data/site";
+import { privacySummary } from "../data/content";
+
+interface Props {
+  disclaimer: string;
+}
+
+const { disclaimer } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-[var(--color-border)] bg-[var(--color-ink)] text-white/80">
+  <div class="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
+    <div class="grid gap-10 md:grid-cols-4">
+      <div class="md:col-span-2">
+        <p class="text-lg font-bold tracking-tight text-white">{siteConfig.name}</p>
+        <p class="mt-2 text-sm text-white/60">
+          {siteConfig.credentials.degrees.join(" · ")}
+        </p>
+        <p class="mt-1 text-sm text-white/60">
+          Reg. No: {siteConfig.credentials.registrationNo} · {siteConfig.contact.city}
+        </p>
+        <div class="mt-6">
+          <a href="#book" class="btn-primary !text-sm">Book appointment</a>
+        </div>
+      </div>
+
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider text-white/40">Navigate</p>
+        <ul class="mt-4 space-y-2.5 text-sm">
+          <li><a href="#services" class="transition hover:text-white">Services</a></li>
+          <li><a href="#credentials" class="transition hover:text-white">Experience</a></li>
+          <li><a href="#research" class="transition hover:text-white">Expertise</a></li>
+          <li><a href="#book" class="transition hover:text-white">Book appointment</a></li>
+          <li><a href="#appointments" class="transition hover:text-white">Clinic & FAQ</a></li>
+          <li><a href="/privacy" class="transition hover:text-white">Privacy Policy</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider text-white/40">Contact</p>
+        <ul class="mt-4 space-y-2.5 text-sm">
+          <li>
+            <a href={`tel:${siteConfig.contact.phone}`} class="transition hover:text-white">
+              {siteConfig.contact.phoneDisplay}
+            </a>
+          </li>
+          <li>
+            <a href={`mailto:${siteConfig.contact.email}`} class="transition hover:text-white">
+              {siteConfig.contact.email}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-12 space-y-3 border-t border-white/10 pt-8 text-xs leading-relaxed text-white/45">
+      <p><strong class="text-white/60">Medical disclaimer:</strong> {disclaimer}</p>
+      <p>{privacySummary}</p>
+      <p>&copy; {year} {siteConfig.name}. All rights reserved.</p>
+    </div>
+  </div>
+</footer>

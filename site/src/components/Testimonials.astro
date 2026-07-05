@@ -1,0 +1,31 @@
+---
+import SectionHeading from "./SectionHeading.astro";
+import { testimonials } from "../data/content";
+
+const activeTestimonials = testimonials.filter((t) => !t.placeholder);
+---
+
+{
+  activeTestimonials.length > 0 ? (
+    <SectionHeading
+      id="testimonials"
+      label="Testimonials"
+      title="What patients say"
+      description="Real experiences shared with consent."
+    >
+      <div class="grid gap-6 md:grid-cols-2">
+        {activeTestimonials.map((item, i) => (
+          <blockquote class={`card reveal ${i === 1 ? "reveal-delay-1" : ""} p-6 sm:p-8`}>
+            <svg class="h-8 w-8 text-[var(--color-accent)]/30" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621-.537-.278-1.24-.375-1.929-.311 1.804 1.897 4.488 2.951 7.674 2.951.657 0 1.281-.058 1.875-.17-.002.986-.093 1.752-.284 2.179z"/>
+            </svg>
+            <p class="mt-4 text-base leading-relaxed text-[var(--color-ink-muted)]">&ldquo;{item.quote}&rdquo;</p>
+            <footer class="mt-5 text-sm font-semibold text-[var(--color-ink)]">
+              {item.author}
+            </footer>
+          </blockquote>
+        ))}
+      </div>
+    </SectionHeading>
+  ) : null
+}

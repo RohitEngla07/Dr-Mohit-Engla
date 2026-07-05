@@ -1,0 +1,258 @@
+---
+import { siteConfig } from "../data/site";
+
+interface Props {
+  id?: string;
+  title?: string;
+  description?: string;
+  class?: string;
+  compact?: boolean;
+}
+
+const {
+  id = "book",
+  title = "Book an appointment",
+  description = "Share your details and we'll confirm a convenient time at D21 Clinic, Indore.",
+  class: className = "",
+  compact = false,
+} = Astro.props;
+
+const fieldPrefix = id;
+const whatsappPhone = siteConfig.contact.phone.replace(/\D/g, "");
+const web3formsAccessKey = siteConfig.appointment.web3formsAccessKey;
+---
+
+<div
+  id={id}
+  class={`scroll-mt-28 ${className}`}
+  data-booking-root={id}
+  data-access-key={web3formsAccessKey}
+  data-whatsapp-phone={whatsappPhone}
+  data-confirmation={siteConfig.appointment.confirmationMessage}
+>
+  <div class="booking-form card-static p-6 sm:p-8" data-form-panel={id}>
+    <form class="booking-form-fields" data-form-id={id} novalidate>
+      <h2 class="text-lg font-bold tracking-tight text-[var(--color-ink)]">{title}</h2>
+      <p class="mt-2 text-sm text-[var(--color-ink-muted)]">{description}</p>
+
+      <div
+        class="booking-form-error mt-4 hidden rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800"
+        role="alert"
+        aria-live="polite"
+      ></div>
+
+      <div class={`mt-6 grid gap-4 ${compact ? "" : "sm:grid-cols-2"}`}>
+        <div class={compact ? "" : "sm:col-span-1"}>
+          <label for={`${fieldPrefix}-name`} class="block text-xs font-medium text-[var(--color-ink-subtle)]">
+            Full name
+          </label>
+          <input
+            type="text"
+            id={`${fieldPrefix}-name`}
+            name="name"
+            required
+            autocomplete="name"
+            class="mt-1.5 block w-full min-h-12 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2.5 text-sm transition focus:border-[var(--color-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/20"
+          />
+        </div>
+        <div class={compact ? "" : "sm:col-span-1"}>
+          <label for={`${fieldPrefix}-phone`} class="block text-xs font-medium text-[var(--color-ink-subtle)]">
+            Phone
+          </label>
+          <input
+            type="tel"
+            id={`${fieldPrefix}-phone`}
+            name="phone"
+            required
+            autocomplete="tel"
+            inputmode="tel"
+            class="mt-1.5 block w-full min-h-12 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2.5 text-sm transition focus:border-[var(--color-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/20"
+          />
+        </div>
+        <div class={compact ? "" : "sm:col-span-2"}>
+          <label for={`${fieldPrefix}-message`} class="block text-xs font-medium text-[var(--color-ink-subtle)]">
+            How can we help?
+          </label>
+          <textarea
+            id={`${fieldPrefix}-message`}
+            name="message"
+            rows={compact ? 3 : 4}
+            required
+            placeholder="Describe your concern or preferred appointment time..."
+            class="mt-1.5 block w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 text-sm transition focus:border-[var(--color-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/20"
+          ></textarea>
+        </div>
+        <div class={compact ? "" : "sm:col-span-2"}>
+          <button type="submit" class="booking-form-submit btn-primary w-full">
+            Request appointment
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div
+    class="booking-form-success card-static hidden p-6 sm:p-8"
+    data-success-panel={id}
+    aria-live="polite"
+  >
+    <div class="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+      <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+      </svg>
+    </div>
+    <h2 class="mt-4 text-lg font-bold tracking-tight text-[var(--color-ink)]">Request received</h2>
+    <p class="booking-form-success-message mt-2 text-sm leading-relaxed text-[var(--color-ink-muted)]"></p>
+    <p class="mt-3 text-sm text-[var(--color-ink-muted)]">
+      Need a faster response? Send the same details on WhatsApp and our team will reply shortly.
+    </p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a
+        href="#"
+        class="booking-form-whatsapp btn-primary"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Follow up on WhatsApp
+      </a>
+      <button type="button" class="booking-form-reset btn-secondary">
+        Submit another request
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function buildWhatsAppUrl(phone: string, name: string, patientPhone: string, message: string) {
+    const text = [
+      "Hello, I would like to book an appointment.",
+      "",
+      `Name: ${name}`,
+      `Phone: ${patientPhone}`,
+      "",
+      message,
+    ].join("\n");
+    return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-booking-root]").forEach((root) => {
+    const formId = root.dataset.bookingRoot ?? "book";
+    const accessKey = root.dataset.accessKey ?? "";
+    const whatsappPhone = root.dataset.whatsappPhone ?? "";
+    const confirmationMessage = root.dataset.confirmation ?? "We will contact you soon.";
+
+    const formPanel = root.querySelector<HTMLElement>(`[data-form-panel="${formId}"]`);
+    const successPanel = root.querySelector<HTMLElement>(`[data-success-panel="${formId}"]`);
+    const form = root.querySelector<HTMLFormElement>(".booking-form-fields");
+    const errorBox = root.querySelector<HTMLElement>(".booking-form-error");
+    const submitBtn = root.querySelector<HTMLButtonElement>(".booking-form-submit");
+    const whatsappLink = root.querySelector<HTMLAnchorElement>(".booking-form-whatsapp");
+    const resetBtn = root.querySelector<HTMLButtonElement>(".booking-form-reset");
+    const successMessage = root.querySelector<HTMLElement>(".booking-form-success-message");
+
+    if (!form || !formPanel || !successPanel) return;
+
+    function showError(message: string) {
+      if (!errorBox) return;
+      errorBox.textContent = message;
+      errorBox.classList.remove("hidden");
+    }
+
+    function hideError() {
+      errorBox?.classList.add("hidden");
+    }
+
+    function showSuccess(name: string, phone: string, message: string) {
+      if (successMessage) {
+        successMessage.textContent = `${confirmationMessage} Thank you, ${name.split(" ")[0] || name}.`;
+      }
+      if (whatsappLink) {
+        whatsappLink.href = buildWhatsAppUrl(whatsappPhone, name, phone, message);
+      }
+      formPanel.classList.add("hidden");
+      successPanel.classList.remove("hidden");
+    }
+
+    function resetForm() {
+      form.reset();
+      hideError();
+      successPanel.classList.add("hidden");
+      formPanel.classList.remove("hidden");
+      submitBtn?.removeAttribute("disabled");
+      if (submitBtn) submitBtn.textContent = "Request appointment";
+    }
+
+    resetBtn?.addEventListener("click", resetForm);
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      hideError();
+
+      const name = (document.getElementById(`${formId}-name`) as HTMLInputElement).value.trim();
+      const phone = (document.getElementById(`${formId}-phone`) as HTMLInputElement).value.trim();
+      const message = (document.getElementById(`${formId}-message`) as HTMLTextAreaElement).value.trim();
+
+      if (!name || !phone || !message) {
+        showError("Please fill in all fields.");
+        return;
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Sending…";
+      }
+
+      if (!accessKey) {
+        showError(
+          "Online booking is being set up. Please use WhatsApp or call us directly — we'll respond right away.",
+        );
+        if (whatsappLink) {
+          whatsappLink.href = buildWhatsAppUrl(whatsappPhone, name, phone, message);
+          window.open(whatsappLink.href, "_blank", "noopener,noreferrer");
+        }
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Request appointment";
+        }
+        return;
+      }
+
+      try {
+        const response = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({
+            access_key: accessKey,
+            subject: `New appointment request — ${name}`,
+            from_name: "Dr Mohit Engla Website",
+            name,
+            phone,
+            message,
+            botcheck: "",
+          }),
+        });
+
+        const result = (await response.json()) as { success?: boolean; message?: string };
+
+        if (!response.ok || !result.success) {
+          throw new Error(result.message ?? "Submission failed");
+        }
+
+        showSuccess(name, phone, message);
+      } catch {
+        showError(
+          "Something went wrong. Please try WhatsApp or call us directly — we are happy to help.",
+        );
+        if (whatsappLink) {
+          whatsappLink.href = buildWhatsAppUrl(whatsappPhone, name, phone, message);
+        }
+      } finally {
+        if (submitBtn && !successPanel.classList.contains("hidden")) return;
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Request appointment";
+        }
+      }
+    });
+  });
+</script>

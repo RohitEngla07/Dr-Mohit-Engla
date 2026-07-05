@@ -1,0 +1,61 @@
+---
+import SectionHeading from "./SectionHeading.astro";
+import { siteConfig } from "../data/site";
+
+const whatsappUrl = `https://wa.me/${siteConfig.contact.phone.replace(/\D/g, "")}?text=${encodeURIComponent(siteConfig.contact.whatsappMessage)}`;
+---
+
+<SectionHeading
+  id="contact"
+  label="Contact"
+  title="Other ways to reach us"
+  description="Prefer to call or visit? Use the details below — or use the booking form at the top of this page."
+  class="bg-white"
+>
+  <div class="reveal max-w-2xl">
+    <div class="card-static p-6 sm:p-8">
+      <h3 class="text-sm font-semibold text-[var(--color-ink)]">Direct contact</h3>
+      <ul class="mt-6 space-y-5">
+        <li>
+          <span class="block text-xs font-medium text-[var(--color-ink-subtle)]">Phone</span>
+          <a href={`tel:${siteConfig.contact.phone}`} class="mt-1 block text-xl font-bold tracking-tight text-[var(--color-accent)] hover:underline">
+            {siteConfig.contact.phoneDisplay}
+          </a>
+        </li>
+        <li>
+          <span class="block text-xs font-medium text-[var(--color-ink-subtle)]">Email</span>
+          <a href={`mailto:${siteConfig.contact.email}`} class="mt-1 block font-semibold text-[var(--color-ink)] hover:text-[var(--color-accent)]">
+            {siteConfig.contact.email}
+          </a>
+        </li>
+        <li>
+          <span class="block text-xs font-medium text-[var(--color-ink-subtle)]">Clinic</span>
+          <span class="mt-1 block font-semibold text-[var(--color-ink)]">{siteConfig.clinic.name}</span>
+          <span class="mt-1 block text-sm text-[var(--color-ink-muted)]">
+            {siteConfig.clinic.addressLines.slice(1).join(", ")}
+          </span>
+          <a
+            href={siteConfig.clinic.mapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mt-2 inline-block text-sm font-semibold text-[var(--color-accent)] hover:underline"
+          >
+            Get directions →
+          </a>
+        </li>
+      </ul>
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="btn-primary">
+          WhatsApp
+        </a>
+        <a href={`tel:${siteConfig.contact.phone}`} class="btn-secondary">
+          Call now
+        </a>
+        <a href="#book" class="btn-secondary">
+          Back to booking form
+        </a>
+      </div>
+    </div>
+  </div>
+</SectionHeading>
