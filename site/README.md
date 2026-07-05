@@ -23,6 +23,12 @@ npm run preview
 
 Deploy the `dist/` folder to Vercel, Netlify, or any static host.
 
+### Vercel (this repo)
+
+The repo root [`vercel.json`](../vercel.json) builds from `site/` automatically. Add `PUBLIC_WEB3FORMS_ACCESS_KEY` in Vercel → Settings → Environment Variables, then redeploy.
+
+Alternatively, set Vercel **Root Directory** to `site`, Framework **Astro**, Output **dist**, Build **`npm run build`**.
+
 ## Appointment form setup (required for email notifications)
 
 The booking form sends appointment requests via [Web3Forms](https://web3forms.com) (free).
