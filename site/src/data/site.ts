@@ -27,8 +27,7 @@ export const siteConfig = {
       "Hello Dr. Mohit Engla, I would like to book a consultation.",
   },
 
-  /** Replace with actual headshot path when available, e.g. "/images/dr-mohit-engla.jpg" */
-  headshot: null as string | null,
+  headshot: "/images/dr-mohit-engla.jpg",
 
   /** Social / professional profile URLs for schema sameAs — add when available */
   profiles: {

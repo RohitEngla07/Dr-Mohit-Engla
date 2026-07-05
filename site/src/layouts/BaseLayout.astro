@@ -75,6 +75,14 @@ const physicianSchema = {
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:locale" content={siteConfig.locale} />
+    {
+      siteConfig.headshot && (
+        <>
+          <meta property="og:image" content={new URL(siteConfig.headshot, siteConfig.url).href} />
+          <meta name="twitter:image" content={new URL(siteConfig.headshot, siteConfig.url).href} />
+        </>
+      )
+    }
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />

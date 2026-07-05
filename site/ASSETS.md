@@ -6,7 +6,7 @@ Update these items in [`src/data/site.ts`](src/data/site.ts) when available.
 
 | Item | Status | Action |
 |------|--------|--------|
-| Professional headshot | **Missing** | Add photo to `public/images/` and set `headshot: "/images/dr-mohit-engla.jpg"` |
+| Professional headshot | **Added** | `/images/dr-mohit-engla.jpg` |
 | Domain | **Placeholder** | Purchase domain (e.g. `drmohitengla.com`) and update `site.url` in config + `astro.config.mjs` |
 | Care philosophy | **Drafted** | Review/edit paragraphs in `src/data/content.ts` → `aboutContent` |
 
